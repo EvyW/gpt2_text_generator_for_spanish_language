@@ -9,7 +9,7 @@ import tensorflow.compat.v1 as tf
 import model, sample, encoder
 
 def sample_model(
-    model_name='117M',
+    model_name='124M',
     seed=None,
     nsamples=0,
     batch_size=1,

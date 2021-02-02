@@ -1,15 +1,14 @@
-#!/usr/bin/env python3
-
 import fire
 import json
 import os
 import numpy as np
 import tensorflow.compat.v1 as tf
-
 import model, sample, encoder
+from googletrans import Translator
+
 
 def interact_model(
-    model_name='117M',
+    model_name='124M',
     seed=None,
     nsamples=1,
     batch_size=1,
@@ -50,7 +49,8 @@ def interact_model(
             hparams[key] = dict2[key]
 
     if length is None:
-        length = hparams.n_ctx // 2
+        #length = hparams.n_ctx // 2
+        length = hparams['n_ctx'] // 2
     elif length > hparams.n_ctx:
         raise ValueError("Can't get samples longer than window size: %s" % hparams['n_ctx'])
 
@@ -71,6 +71,11 @@ def interact_model(
 
         while True:
             raw_text = input("Model prompt >>> ")
+            translate_this_to_english = raw_text
+            translator = Translator() # set the translator
+            translation_to_english = translator.translate(translate_this_to_english, src='es', dest='en') # this translate to english
+            raw_text = translation_to_english.text
+
             while not raw_text:
                 print('Prompt should not be empty!')
                 raw_text = input("Model prompt >>> ")
@@ -83,6 +88,8 @@ def interact_model(
                 for i in range(batch_size):
                     generated += 1
                     text = enc.decode(out[i])
+                    translation_to_spanish = translator.translate(text, src='en', dest='es') # this translates to spanish
+                    text =  translation_to_spanish.text
                     print("=" * 40 + " SAMPLE " + str(generated) + " " + "=" * 40)
                     print(text)
             print("=" * 80)
