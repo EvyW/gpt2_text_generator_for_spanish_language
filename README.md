@@ -16,7 +16,7 @@ Note that the new functionality only translate any text given in english to span
 
 # Execution
 
-Execute this in your terminal:
+Execute the following in your terminal:
 
 ```
 python3 interactive_conditional_samples.py
